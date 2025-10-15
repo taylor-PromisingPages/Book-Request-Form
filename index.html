@@ -1,3 +1,7 @@
+Promising Pages Mail	Taylor Houston <taylor@promising-pages.org>
+Book Request Form Code V2
+Somesh Laheri <someshlaheri@gmail.com>	Wed, Oct 15, 2025 at 3:50 PM
+To: taylor@promising-pages.org
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -632,3 +636,136 @@
 
           <div class="form-group">
             <label for="00N8c00000aEJp2">Book Selection Type*</label>
+            <select id="00N8c00000aEJp2" name="00N8c00000aEJp2" required>
+              <option value="">--Select an option--</option>
+              <option value="Self-Select">
+                Self-Select (I'll choose my own books)
+              </option>
+              <option value="Pre-Boxed">
+                Pre-Boxed (Staff will select books for me)
+              </option>
+            </select>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit Request</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function showAlert(msg) {
+        const box = document.getElementById("customAlertBox");
+        const text = document.getElementById("customAlertMsg");
+        text.textContent = msg;
+        box.style.display = "block";
+
+        const overlay = document.createElement("div");
+        overlay.id = "customAlertOverlay";
+        document.body.appendChild(overlay);
+      }
+
+      function closeAlert() {
+        const box = document.getElementById("customAlertBox");
+        const overlay = document.getElementById("customAlertOverlay");
+        box.style.display = "none";
+        if (overlay) overlay.remove();
+      }
+
+      (function () {
+        const form = document.getElementById("webToLeadForm");
+        const pickupDate = document.getElementById("pickupDate");
+        const pickupTime = document.getElementById("pickupTime");
+        const pickupHidden = document.getElementById("pickupHidden");
+        const pickupTimeHidden = document.getElementById("pickupTimeHidden");
+        const expectedDateInput = document.getElementById("expectedDateInput");
+        const expectedHidden = document.getElementById("expectedHidden");
+
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const dd = String(today.getDate()).padStart(2, "0");
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        pickupDate.setAttribute("min", todayStr);
+        expectedDateInput.setAttribute("min", todayStr);
+
+        function validatePickupDate() {
+          const value = pickupDate.value;
+          if (!value || value.length !== 10) return;
+
+          const [year, month, day] = value.split("-").map(Number);
+          if (year < 1000) return;
+
+          const chosen = new Date(year, month - 1, day, 12, 0, 0);
+          const todayMidnight = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate()
+          );
+          const chosenMidnight = new Date(year, month - 1, day);
+
+          if (chosenMidnight < todayMidnight) {
+            showAlert("Pick-up date must be today or in the future.");
+            pickupDate.value = "";
+            return;
+          }
+
+          const dayOfWeek = chosen.getDay();
+          if (dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6) {
+            showAlert("Pick-up days are Monday through Thursday only.");
+            pickupDate.value = "";
+          }
+        }
+
+        function validatePickupTime() {
+          const timeVal = pickupTime.value;
+          if (!timeVal || timeVal.length !== 5) return;
+
+          const [hours, minutes] = timeVal.split(":").map(Number);
+          const totalMinutes = hours * 60 + minutes;
+          const minMinutes = 9 * 60 + 30;
+          const maxMinutes = 15 * 60 + 30;
+
+          if (totalMinutes < minMinutes || totalMinutes > maxMinutes) {
+            showAlert("Pick-up time must be between 9:30 AM and 3:30 PM.");
+            pickupTime.value = "";
+          }
+        }
+
+        pickupDate.addEventListener("change", validatePickupDate);
+        pickupDate.addEventListener("blur", validatePickupDate);
+        pickupTime.addEventListener("change", validatePickupTime);
+        pickupTime.addEventListener("blur", validatePickupTime);
+
+        form.addEventListener("submit", function (e) {
+          const dateVal = pickupDate.value;
+          const timeVal = pickupTime.value;
+
+          if (!dateVal || !timeVal) {
+            e.preventDefault();
+            showAlert("Please select both pickup date and time.");
+            return;
+          }
+
+          const combined = new Date(`${dateVal}T${timeVal}`);
+          const month = combined.getMonth() + 1;
+          const day = combined.getDate();
+          const year = combined.getFullYear();
+
+          let hours = combined.getHours();
+          const minutes = String(combined.getMinutes()).padStart(2, "0");
+          const ampm = hours >= 12 ? "PM" : "AM";
+          hours = hours % 12 || 12;
+
+          pickupHidden.value = `${month}/${day}/${year}, ${hours}:${minutes} ${ampm}`;
+          pickupTimeHidden.value = `${hours}:${minutes} ${ampm}`;
+
+          const expectedVal = expectedDateInput.value;
+          if (expectedVal) {
+            const [eyear, emonth, eday] = expectedVal.split("-");
+            expectedHidden.value = `${emonth}/${eday}/${eyear}`;
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
