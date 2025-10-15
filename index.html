@@ -4,47 +4,247 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book Request Form</title>
-  </head>
-  <body>
-    <!-- CUSTOM STYLES FOR FORM -->
     <style>
-      /* Custom popup alert */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        line-height: 1.6;
+      }
+
+      .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .form-header {
+        background: linear-gradient(135deg, #0070d2 0%, #0056a3 100%);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+      }
+
+      .form-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .form-header p {
+        font-size: 16px;
+        opacity: 0.95;
+      }
+
+      .form-content {
+        padding: 40px 30px;
+      }
+
+      .info-box {
+        background: #f0f7ff;
+        border-left: 4px solid #0070d2;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .info-box strong {
+        display: block;
+        margin-bottom: 10px;
+        color: #0056a3;
+      }
+
+      .required-note {
+        font-style: italic;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 14px;
+      }
+
+      .section-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #333;
+        margin: 40px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #0070d2;
+      }
+
+      .form-group {
+        margin-bottom: 24px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="date"],
+      .form-group input[type="time"],
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 15px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .form-group input[type="text"]:focus,
+      .form-group input[type="email"]:focus,
+      .form-group input[type="date"]:focus,
+      .form-group input[type="time"]:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #0070d2;
+        box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .form-group select[multiple] {
+        min-height: 120px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .book-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .book-input-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .book-input-group label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 6px;
+      }
+
+      .book-input-group input {
+        padding: 10px 14px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .book-input-group input:focus {
+        outline: none;
+        border-color: #0070d2;
+        box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
+      }
+
+      .submit-btn {
+        background: linear-gradient(135deg, #0070d2 0%, #0056a3 100%);
+        color: white;
+        border: none;
+        padding: 16px 48px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 112, 210, 0.3);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Custom Alert Styles */
       #customAlertBox {
         display: none;
         position: fixed;
-        top: 30%;
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         background: white;
-        border: 2px solid #0070d2;
-        border-radius: 12px;
-        padding: 25px 30px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         z-index: 9999;
         text-align: center;
-        max-width: 500px;
+        max-width: 450px;
         width: 90%;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -60%);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
       }
 
       #customAlertMsg {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         font-size: 16px;
         color: #333;
+        line-height: 1.5;
       }
 
       #customAlertBox button {
-        background-color: #0070d2;
+        background: linear-gradient(135deg, #0070d2 0%, #0056a3 100%);
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
+        padding: 12px 32px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 600;
+        transition: all 0.3s ease;
       }
 
       #customAlertBox button:hover {
-        background-color: #005bb5;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 112, 210, 0.3);
       }
 
       #customAlertOverlay {
@@ -53,465 +253,382 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.6);
         z-index: 9998;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .form-header {
+          padding: 30px 20px;
+        }
+
+        .form-header h1 {
+          font-size: 24px;
+        }
+
+        .form-content {
+          padding: 30px 20px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .book-categories {
+          grid-template-columns: 1fr;
+        }
+
+        .section-title {
+          font-size: 20px;
+        }
+
+        .submit-btn {
+          padding: 14px 32px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .form-header h1 {
+          font-size: 20px;
+        }
+
+        .form-header p {
+          font-size: 14px;
+        }
+
+        .form-content {
+          padding: 20px 15px;
+        }
+
+        .info-box {
+          padding: 15px;
+          font-size: 13px;
+        }
+
+        .section-title {
+          font-size: 18px;
+          margin: 30px 0 15px 0;
+        }
       }
     </style>
-
-    <!-- CUSTOM ALERT POPUP HTML -->
+  </head>
+  <body>
+    <!-- Custom Alert -->
     <div id="customAlertBox">
       <div id="customAlertMsg"></div>
       <button onclick="closeAlert()">OK</button>
     </div>
 
-    <!-- THE FORM STARTS HERE -->
-    <form
-      id="webToLeadForm"
-      action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8"
-      method="POST"
-    >
-      <input name="oid" type="hidden" value="00D8c00000176n8" />
-      <input
-        name="retURL"
-        type="hidden"
-        value="https://promising-pages.org/book-request-submitted/"
-      />
+    <div class="form-container">
+      <div class="form-content">
+        <p class="required-note">*Indicates a required field</p>
 
-      <em>*Indicates a field is required</em><br />
-      <label for="first_name">First Name* </label
-      ><input
-        id="first_name"
-        maxlength="40"
-        name="first_name"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="last_name">Last Name* </label
-      ><input
-        id="last_name"
-        maxlength="80"
-        name="last_name"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="email">Email* </label
-      ><input
-        id="email"
-        maxlength="80"
-        name="email"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="company">Organization/School Name* </label
-      ><input
-        id="company"
-        maxlength="80"
-        name="company"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="title">Title </label
-      ><input
-        id="title"
-        maxlength="40"
-        name="title"
-        size="20"
-        type="text"
-      /><br />
-      <label for="phone">Phone* </label
-      ><input
-        id="phone"
-        maxlength="40"
-        name="phone"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      Preferred Phone:
-      <select title="Preferred Phone" name="00N8c00000G6A2B">
-        <option value="">--None--</option>
-        <option value="Home">Home</option>
-        <option value="Work">Work</option>
-        <option value="Mobile">Mobile</option>
-        <option value="Other">Other</option>
-      </select>
+        <form
+          id="webToLeadForm"
+          action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8"
+          method="POST"
+          target="_parent"
+        >
+          <input name="oid" type="hidden" value="00D8c00000176n8" />
+          <input
+            name="retURL"
+            type="hidden"
+            value="https://promising-pages.org/book-request-submitted/"
+          />
+          <input name="lead_source" type="hidden" value="Web" />
+          <input name="recordType" type="hidden" value="0128c000001e1kK" />
 
-      <h3></h3>
-      <h3>
-        <b><label for="">Address Information</label></b>
-      </h3>
-      <label for="street">Street* </label
-      ><textarea name="street" required=""></textarea><br />
-      <label for="city">City* </label
-      ><input
-        id="city"
-        maxlength="40"
-        name="city"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="state">State/Province* </label
-      ><input
-        id="state"
-        maxlength="20"
-        name="state"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="zip">Zip Code* </label
-      ><input
-        id="zip"
-        maxlength="20"
-        name="zip"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      <label for="country">Country* </label
-      ><input
-        id="country"
-        maxlength="40"
-        name="country"
-        required=""
-        size="20"
-        type="text"
-        value="United States"
-      />
+          <!-- Hidden fields for Salesforce -->
+          <input type="hidden" id="pickupHidden" name="00N8c00000aEJox" />
+          <input type="hidden" id="pickupTimeHidden" name="00N8c00000e0Wwy" />
+          <input type="hidden" id="expectedHidden" name="00N8c00000dxTkW" />
 
-      <h3></h3>
-      <h3>
-        <b><label for="">Books Information</label></b>
-      </h3>
-      <b
-        ><label for=""
-          >Please provide the number of books for each category</label
-        ></b
-      ><br />
-      Board Books (Birth - Pre-K):
-      <input
-        id="00N8c00000aEJnu"
-        name="00N8c00000aEJnu"
-        size="20"
-        type="text"
-      /><br />
-      Picture Books (Pre-K - 2nd Grade):
-      <input
-        id="00N8c00000aEJnz"
-        name="00N8c00000aEJnz"
-        size="20"
-        type="text"
-      /><br />
-      Early Chapter/Advanced Picture (2nd Grade - 4th Grade):
-      <input
-        id="00N8c00000aEJo9"
-        name="00N8c00000aEJo9"
-        size="20"
-        type="text"
-      /><br />
-      Upper Chapter Books (4th Grade - 5th Grade):
-      <input
-        id="00N8c00000aEJoE"
-        name="00N8c00000aEJoE"
-        size="20"
-        type="text"
-      /><br />
-      Middle School Books Requested (6th Grade - 8th Grade):
-      <input
-        id="00N8c00000aEJoJ"
-        name="00N8c00000aEJoJ"
-        size="20"
-        type="text"
-      /><br />
-      High School Books Requested (9th Grade - 12th Grade):
-      <input
-        id="00N8c00000e09tp"
-        name="00N8c00000e09tp"
-        size="20"
-        type="text"
-      /><br />
-      Adult Books (18 and Up):
-      <input
-        id="00N8c00000aEJoO"
-        name="00N8c00000aEJoO"
-        size="20"
-        type="text"
-      /><br />
-      Religious Books:
-      <input
-        id="00N8c00000aEJoT"
-        name="00N8c00000aEJoT"
-        size="20"
-        type="text"
-      /><br />
-      Activity Books:
-      <input
-        id="00N8c00000aEJod"
-        name="00N8c00000aEJod"
-        size="20"
-        type="text"
-      /><br />
-      Free Bookmarks for Students:
-      <input
-        id="00N8c00000aEJoY"
-        name="00N8c00000aEJoY"
-        size="20"
-        type="text"
-      />
+          <h2 class="section-title">Contact Information</h2>
 
-      <h3></h3>
-      <h3>
-        <b><label for="">Other Book Distribution Information</label></b>
-      </h3>
-      Anything else we should know about the books you are requesting?
-      <textarea
-        id="00N8c00000aEJon"
-        name="00N8c00000aEJon"
-        rows="3"
-        wrap="soft"
-      ></textarea
-      ><br />
-      How many children do you plan to serve with these books?* (Please enter
-      numbers only, no text or number ranges)
-      <input
-        id="00N8c00000aEMWm"
-        name="00N8c00000aEMWm"
-        required=""
-        size="20"
-        type="text"
-      /><br />
-      What specifically will these books be used for? (Hold down the Ctrl button
-      to select more than one option.)*<br />
-      <select
-        title="Book Use"
-        multiple="multiple"
-        name="00N8c00000aEMWr"
-        required=""
-      >
-        <option value="Building Home Libraries">Building Home Libraries</option>
-        <option value="Classroom Libraries">Classroom Libraries</option>
-        <option value="School Library Support">School Library Support</option>
-        <option value="Book Giveaway">Book Giveaway</option>
-        <option value="Literacy or Curriculum Night/Fair">
-          Literacy or Curriculum Night/Fair
-        </option>
-        <option value="Summer Reading/Summer Slide">
-          Summer Reading/Summer Slide
-        </option>
-        <option value="Other">Other</option></select
-      ><br />
-      How many books do you plan to provide per child?* (Please enter numbers
-      only, no text or number ranges)
-      <input
-        id="00N8c00000aEJos"
-        name="00N8c00000aEJos"
-        required=""
-        size="20"
-        type="text"
-      /><br />
+          <div class="form-row">
+            <div class="form-group">
+              <label for="first_name">First Name*</label>
+              <input
+                id="first_name"
+                name="first_name"
+                type="text"
+                maxlength="40"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="last_name">Last Name*</label>
+              <input
+                id="last_name"
+                name="last_name"
+                type="text"
+                maxlength="80"
+                required
+              />
+            </div>
+          </div>
 
-      What date would you like to pick up your books? Pick-up days are
-      Monday-Thursday. (Please choose a date from the date picker)*
-      <span class="dateInput dateOnlyInput">
-        <input id="pickupDate" required type="date" /> </span
-      ><br />
+          <div class="form-group">
+            <label for="email">Email Address*</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              maxlength="80"
+              required
+            />
+          </div>
 
-      What time would you prefer to pick up your books on the date you selected?
-      Pick up times are between 9:30am-3:30pm.*
-      <input
-        required
-        type="time"
-        id="pickupTime"
-        min="09:30"
-        max="15:30"
-      /><br />
+          <div class="form-row">
+            <div class="form-group">
+              <label for="company">Organization/School Name*</label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                maxlength="80"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input id="title" name="title" type="text" maxlength="40" />
+            </div>
+          </div>
 
-      When is your expected book distribution date?*
-      <input id="expectedDateInput" required type="date" /><br />
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number*</label>
+              <input
+                id="phone"
+                name="phone"
+                type="text"
+                maxlength="40"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="00N8c00000G6A2B">Preferred Phone Type</label>
+              <select name="00N8c00000G6A2B">
+                <option value="">--Select--</option>
+                <option value="Home">Home</option>
+                <option value="Work">Work</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
 
-      Would you like to self-select your books or have them pre-boxed by
-      Promising Pages staff?*
-      <select
-        id="00N8c00000aEJp2"
-        title="Book Selection Type"
-        name="00N8c00000aEJp2"
-        required=""
-      >
-        <option value="">--None--</option>
-        <option value="Self-Select">Self-Select</option>
-        <option value="Pre-Boxed">Pre-Boxed</option>
-      </select>
+          <h2 class="section-title">Address Information</h2>
 
-      <!-- Hidden fields to store formatted dates for Salesforce -->
-      <input type="hidden" id="pickupHidden" name="00N8c00000aEJox" />
-      <input type="hidden" id="pickupTimeHidden" name="00N8c00000e0Wwy" />
-      <input type="hidden" id="expectedHidden" name="00N8c00000dxTkW" />
+          <div class="form-group">
+            <label for="street">Street Address*</label>
+            <textarea name="street" id="street" required></textarea>
+          </div>
 
-      <input
-        id="lead_source"
-        name="lead_source"
-        required=""
-        type="hidden"
-        value="Web"
-      />
-      <input
-        id="recordType"
-        name="recordType"
-        type="hidden"
-        value="0128c000001e1kK"
-      /><br />
-      <input name="submit" type="submit" />
-    </form>
-    <!-- THE FORM ENDS HERE -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City*</label>
+              <input
+                id="city"
+                name="city"
+                type="text"
+                maxlength="40"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="state">State/Province*</label>
+              <input
+                id="state"
+                name="state"
+                type="text"
+                maxlength="20"
+                required
+              />
+            </div>
+          </div>
 
-    <!-- JAVASCRIPT FOR VALIDATION AND ALERTS -->
-    <script>
-      // Alert functions
-      function showAlert(msg) {
-        const box = document.getElementById("customAlertBox");
-        const text = document.getElementById("customAlertMsg");
-        text.textContent = msg;
-        box.style.display = "block";
+          <div class="form-row">
+            <div class="form-group">
+              <label for="zip">Zip Code*</label>
+              <input id="zip" name="zip" type="text" maxlength="20" required />
+            </div>
+            <div class="form-group">
+              <label for="country">Country*</label>
+              <input
+                id="country"
+                name="country"
+                type="text"
+                maxlength="40"
+                value="United States"
+                required
+              />
+            </div>
+          </div>
 
-        // Add overlay in the background
-        const overlay = document.createElement("div");
-        overlay.id = "customAlertOverlay";
-        document.body.appendChild(overlay);
-      }
+          <h2 class="section-title">Books Information</h2>
 
-      function closeAlert() {
-        const box = document.getElementById("customAlertBox");
-        const overlay = document.getElementById("customAlertOverlay");
+          <p style="font-weight: 600; margin-bottom: 16px; color: #555">
+            Please provide the number of books for each category:
+          </p>
 
-        box.style.display = "none";
-        if (overlay) {
-          overlay.remove();
-        }
-      }
+          <div class="book-categories">
+            <div class="book-input-group">
+              <label for="00N8c00000aEJnu">Board Books (Birth - Pre-K)</label>
+              <input id="00N8c00000aEJnu" name="00N8c00000aEJnu" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJnz"
+                >Picture Books (Pre-K - 2nd Grade)</label
+              >
+              <input id="00N8c00000aEJnz" name="00N8c00000aEJnz" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJo9"
+                >Early Chapter/Advanced Picture (2nd - 4th Grade)</label
+              >
+              <input id="00N8c00000aEJo9" name="00N8c00000aEJo9" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJoE"
+                >Upper Chapter Books (4th - 5th Grade)</label
+              >
+              <input id="00N8c00000aEJoE" name="00N8c00000aEJoE" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJoJ"
+                >Middle School Books (6th - 8th Grade)</label
+              >
+              <input id="00N8c00000aEJoJ" name="00N8c00000aEJoJ" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000e09tp"
+                >High School Books (9th - 12th Grade)</label
+              >
+              <input id="00N8c00000e09tp" name="00N8c00000e09tp" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJoO">Adult Books (18 and Up)</label>
+              <input id="00N8c00000aEJoO" name="00N8c00000aEJoO" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJoT">Religious Books</label>
+              <input id="00N8c00000aEJoT" name="00N8c00000aEJoT" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJod">Activity Books</label>
+              <input id="00N8c00000aEJod" name="00N8c00000aEJod" type="text" />
+            </div>
+            <div class="book-input-group">
+              <label for="00N8c00000aEJoY">Free Bookmarks for Students</label>
+              <input id="00N8c00000aEJoY" name="00N8c00000aEJoY" type="text" />
+            </div>
+          </div>
 
-      // Main validation script
-      (function () {
-        const form = document.getElementById("webToLeadForm");
-        const pickupDate = document.getElementById("pickupDate");
-        const pickupTime = document.getElementById("pickupTime");
-        const pickupHidden = document.getElementById("pickupHidden");
-        const pickupTimeHidden = document.getElementById("pickupTimeHidden");
-        const expectedDateInput = document.getElementById("expectedDateInput");
-        const expectedHidden = document.getElementById("expectedHidden");
+          <h2 class="section-title">Distribution Details</h2>
 
-        // Set minimum date to today
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = String(today.getMonth() + 1).padStart(2, "0");
-        const dd = String(today.getDate()).padStart(2, "0");
-        const todayStr = `${yyyy}-${mm}-${dd}`;
-        pickupDate.setAttribute("min", todayStr);
-        expectedDateInput.setAttribute("min", todayStr);
+          <div class="form-group">
+            <label for="00N8c00000aEJon">Additional Information</label>
+            <textarea
+              id="00N8c00000aEJon"
+              name="00N8c00000aEJon"
+              rows="3"
+              placeholder="Anything else we should know about the books you are requesting?"
+            ></textarea>
+          </div>
 
-        // Validate pickup date (Monday-Thursday only, no past dates)
-        function validatePickupDate() {
-          const value = pickupDate.value;
-          if (!value) return;
+          <div class="form-group">
+            <label for="00N8c00000aEMWm"
+              >How many children do you plan to serve with these books?*
+              (Numbers only)</label
+            >
+            <input
+              id="00N8c00000aEMWm"
+              name="00N8c00000aEMWm"
+              type="text"
+              required
+            />
+          </div>
 
-          // Only validate if the date format is complete
-          if (value.length !== 10) return;
+          <div class="form-group">
+            <label for="00N8c00000aEMWr"
+              >What will these books be used for?* (Hold Ctrl to select
+              multiple)</label
+            >
+            <select name="00N8c00000aEMWr" multiple required>
+              <option value="Building Home Libraries">
+                Building Home Libraries
+              </option>
+              <option value="Classroom Libraries">Classroom Libraries</option>
+              <option value="School Library Support">
+                School Library Support
+              </option>
+              <option value="Book Giveaway">Book Giveaway</option>
+              <option value="Literacy or Curriculum Night/Fair">
+                Literacy or Curriculum Night/Fair
+              </option>
+              <option value="Summer Reading/Summer Slide">
+                Summer Reading/Summer Slide
+              </option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
-          const [year, month, day] = value.split("-").map(Number);
+          <div class="form-group">
+            <label for="00N8c00000aEJos"
+              >How many books per child?* (Numbers only)</label
+            >
+            <input
+              id="00N8c00000aEJos"
+              name="00N8c00000aEJos"
+              type="text"
+              required
+            />
+          </div>
 
-          // Make sure we have a valid year
-          if (year < 1000) return;
+          <h2 class="section-title">Pickup & Distribution Schedule</h2>
 
-          const chosen = new Date(year, month - 1, day, 12, 0, 0);
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pickupDate"
+                >Pickup Date* (Monday-Thursday only)</label
+              >
+              <input id="pickupDate" type="date" required />
+            </div>
+            <div class="form-group">
+              <label for="pickupTime">Pickup Time* (9:30 AM - 3:30 PM)</label>
+              <input
+                id="pickupTime"
+                type="time"
+                min="09:30"
+                max="15:30"
+                required
+              />
+            </div>
+          </div>
 
-          // Check if date is in the past
-          const todayMidnight = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate()
-          );
-          const chosenMidnight = new Date(year, month - 1, day);
+          <div class="form-group">
+            <label for="expectedDateInput"
+              >Expected Book Distribution Date*</label
+            >
+            <input id="expectedDateInput" type="date" required />
+          </div>
 
-          if (chosenMidnight < todayMidnight) {
-            showAlert("Pick-up date must be today or in the future.");
-            pickupDate.value = "";
-            return;
-          }
-
-          // Check day of week (0=Sunday, 6=Saturday)
-          const dayOfWeek = chosen.getDay();
-
-          if (dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6) {
-            showAlert("Pick-up days are Monday through Thursday only.");
-            pickupDate.value = "";
-          }
-        }
-
-        pickupDate.addEventListener("change", validatePickupDate);
-        pickupDate.addEventListener("blur", validatePickupDate);
-
-        // Validate pickup time (9:30 AM - 3:30 PM)
-        function validatePickupTime() {
-          const timeVal = pickupTime.value;
-          if (!timeVal) return;
-
-          // Only validate if the time format is complete
-          if (timeVal.length !== 5) return;
-
-          const [hours, minutes] = timeVal.split(":").map(Number);
-          const totalMinutes = hours * 60 + minutes;
-          const minMinutes = 9 * 60 + 30; // 9:30 AM
-          const maxMinutes = 15 * 60 + 30; // 3:30 PM
-
-          if (totalMinutes < minMinutes || totalMinutes > maxMinutes) {
-            showAlert("Pick-up time must be between 9:30 AM and 3:30 PM.");
-            pickupTime.value = "";
-          }
-        }
-
-        pickupTime.addEventListener("change", validatePickupTime);
-        pickupTime.addEventListener("blur", validatePickupTime);
-
-        // Format dates before submission
-        form.addEventListener("submit", function (e) {
-          const dateVal = pickupDate.value;
-          const timeVal = pickupTime.value;
-
-          if (!dateVal || !timeVal) {
-            e.preventDefault();
-            showAlert("Please select both pickup date and time.");
-            return;
-          }
-
-          // Format pickup date and time for Salesforce
-          const combined = new Date(`${dateVal}T${timeVal}`);
-          const month = combined.getMonth() + 1;
-          const day = combined.getDate();
-          const year = combined.getFullYear();
-
-          let hours = combined.getHours();
-          const minutes = String(combined.getMinutes()).padStart(2, "0");
-          const ampm = hours >= 12 ? "PM" : "AM";
-          hours = hours % 12 || 12;
-
-          // Set hidden field for pickup date/time combined
-          pickupHidden.value = `${month}/${day}/${year}, ${hours}:${minutes} ${ampm}`;
-
-          // Set hidden field for time only
-          pickupTimeHidden.value = `${hours}:${minutes} ${ampm}`;
-
-          // Format expected distribution date
-          const expectedVal = expectedDateInput.value;
-          if (expectedVal) {
-            const [eyear, emonth, eday] = expectedVal.split("-");
-            expectedHidden.value = `${emonth}/${eday}/${eyear}`;
-          }
-        });
-      })();
-    </script>
-  </body>
-</html>
+          <div class="form-group">
+            <label for="00N8c00000aEJp2">Book Selection Type*</label>
