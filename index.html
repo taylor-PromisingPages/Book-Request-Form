@@ -226,6 +226,63 @@
         box-shadow: 0 0 0 4px rgba(32, 94, 97, 0.1);
       }
 
+      /* Radio group — replaces the native dropdown for Book Selection Type */
+      .form-group .group-label {
+        display: block;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: #113868;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .radio-group {
+        display: grid;
+        gap: 12px;
+      }
+
+      .form-group .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 0;
+        padding: 14px 16px;
+        border: 2px solid #B9D9EB;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        color: #113868;
+      }
+
+      .form-group .radio-option:hover {
+        border-color: #205E61;
+        background: #f5fbfc;
+      }
+
+      .form-group .radio-option input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin: 0;
+        accent-color: #205E61;
+        cursor: pointer;
+      }
+
+      .form-group .radio-option input[type="radio"]:focus-visible {
+        outline: 2px solid #205E61;
+        outline-offset: 2px;
+      }
+
+      .form-group .radio-option.is-selected {
+        border-color: #205E61;
+        background: #eef7f8;
+        box-shadow: 0 0 0 4px rgba(32, 94, 97, 0.1);
+      }
+
       .submit-btn {
         background: linear-gradient(135deg, #205E61 0%, #113868 100%);
         color: white;
@@ -424,13 +481,20 @@
           padding: 28px;
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body>
     <!-- Custom Alert -->
     <div id="customAlertBox">
       <div id="customAlertMsg"></div>
-      <button onclick="closeAlert()">OK</button>
+      <button type="button" onclick="closeAlert()">OK</button>
     </div>
 
     <div class="form-container">
@@ -443,8 +507,8 @@
       <div class="form-content">
         <div class="info-box">
           <strong>Important Information:</strong>
-        
-         We do our best to fulfill every book request as quickly as possible. Please note that all orders are filled based on current book availability.<br> 
+
+         We do our best to fulfill every book request as quickly as possible. Please note that all orders are filled based on current book availability.<br>
           <ul style="padding-left: 40px; margin-left: 20px;">
   <li>For orders under 800 books, please allow up to 5 business days for fulfillment.</li>
   <li>For orders of 800 books or more, please allow up to 10 business days for fulfillment.</li>
@@ -465,7 +529,7 @@
           <input name="retURL" type="hidden" value="https://promising-pages.org/book-request-submitted/" />
           <input name="lead_source" type="hidden" value="Web" />
           <input name="recordType" type="hidden" value="0128c000001e1kK" />
-          
+
           <!-- Hidden fields for Salesforce -->
           <input type="hidden" id="pickupHidden" name="00N8c00000aEJox" />
           <input type="hidden" id="pickupTimeHidden" name="00N8c00000e0Wwy" />
@@ -506,8 +570,8 @@
               <input id="phone" name="phone" type="text" maxlength="40" required />
             </div>
             <div class="form-group">
-              <label for="00N8c00000G6A2B">Preferred Phone Type</label>
-              <select name="00N8c00000G6A2B">
+              <label for="phoneType">Preferred Phone Type</label>
+              <select id="phoneType" name="00N8c00000G6A2B">
                 <option value="">--Select--</option>
                 <option value="Home">Home</option>
                 <option value="Work">Work</option>
@@ -607,7 +671,7 @@
 
           <div class="form-group">
             <label for="00N8c00000aEMWr">What will these books be used for?* (Hold Ctrl to select multiple)</label>
-            <select name="00N8c00000aEMWr" multiple required>
+            <select id="00N8c00000aEMWr" name="00N8c00000aEMWr" multiple required>
               <option value="Building Home Libraries">Building Home Libraries</option>
               <option value="Classroom Libraries">Classroom Libraries</option>
               <option value="School Library Support">School Library Support</option>
@@ -623,7 +687,7 @@
             <input id="00N8c00000aEJos" name="00N8c00000aEJos" type="text" required />
           </div>
 
-          <h2 class="section-title">Pickup & Distribution Schedule</h2>
+          <h2 class="section-title">Pickup &amp; Distribution Schedule</h2>
 
           <div class="form-row">
             <div class="form-group">
@@ -641,13 +705,21 @@
             <input id="expectedDateInput" type="date" required />
           </div>
 
+          <!-- Book Selection Type: radio buttons instead of a native <select>.
+               A dropdown popup gets force-closed whenever the parent resizes the
+               iframe; radios have no popup, so they can't be affected. -->
           <div class="form-group">
-            <label for="00N8c00000aEJp2">Book Selection Type*</label>
-            <select id="00N8c00000aEJp2" name="00N8c00000aEJp2" required>
-              <option value="">--Select an option--</option>
-              <option value="Self-Select">Self-Select (I'll choose my own books)</option>
-              <option value="Pre-Boxed">Pre-Boxed (Staff will select books for me)</option>
-            </select>
+            <p class="group-label" id="bookSelectionLabel">Book Selection Type*</p>
+            <div class="radio-group" role="radiogroup" aria-labelledby="bookSelectionLabel">
+              <label class="radio-option">
+                <input type="radio" name="00N8c00000aEJp2" value="Self-Select" required />
+                <span>Self-Select (I'll choose my own books)</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="00N8c00000aEJp2" value="Pre-Boxed" />
+                <span>Pre-Boxed (Staff will select books for me)</span>
+              </label>
+            </div>
           </div>
 
           <button type="submit" class="submit-btn">Submit Request</button>
@@ -662,45 +734,80 @@
         text.textContent = msg;
         box.style.display = "block";
 
-        const overlay = document.createElement("div");
-        overlay.id = "customAlertOverlay";
-        document.body.appendChild(overlay);
-        
-        // Update parent height when alert shows
+        // Reuse the overlay if one already exists, so stacked alerts can never
+        // leave an invisible full-screen blocker behind.
+        let overlay = document.getElementById("customAlertOverlay");
+        if (!overlay) {
+          overlay = document.createElement("div");
+          overlay.id = "customAlertOverlay";
+          document.body.appendChild(overlay);
+        }
+        document.body.classList.add("alert-open");
+
         updateParentHeight();
       }
 
       function closeAlert() {
         const box = document.getElementById("customAlertBox");
-        const overlay = document.getElementById("customAlertOverlay");
         box.style.display = "none";
-        if (overlay) overlay.remove();
-        
-        // Update parent height when alert closes
+
+        // Remove every overlay, not just the first one.
+        document.querySelectorAll("#customAlertOverlay").forEach(function (el) {
+          el.remove();
+        });
+        document.body.classList.remove("alert-open");
+
         updateParentHeight();
       }
 
-      // Function to send height to parent window
+      // ---- Iframe height sync -------------------------------------------------
+      // Throttled to one message per animation frame and suppressed when the
+      // height hasn't meaningfully changed. Without these guards the parent's
+      // resize feeds back into our own resize listener, the iframe jitters
+      // continuously, and the browser closes any open dropdown or date picker.
+      var lastSentHeight = 0;
+      var heightUpdateQueued = false;
+
       function updateParentHeight() {
-        const height = document.documentElement.scrollHeight;
-        window.parent.postMessage({ 
-          type: 'iframeHeight', 
-          height: height 
-        }, '*');
+        if (heightUpdateQueued) return;
+        heightUpdateQueued = true;
+
+        window.requestAnimationFrame(function () {
+          heightUpdateQueued = false;
+          var height = Math.ceil(document.documentElement.scrollHeight);
+          if (Math.abs(height - lastSentHeight) < 5) return;
+          lastSentHeight = height;
+          window.parent.postMessage({ type: "iframeHeight", height: height }, "*");
+        });
       }
 
-      // Update height on load and when content changes
-      window.addEventListener('load', updateParentHeight);
-      window.addEventListener('resize', updateParentHeight);
+      window.addEventListener("load", updateParentHeight);
+      window.addEventListener("resize", updateParentHeight);
 
-      // Create observer to watch for DOM changes
+      // Watch for content changes only. Attribute changes are excluded because
+      // routine attribute churn (validation states, focus styling) triggered a
+      // resize on nearly every interaction.
       const observer = new MutationObserver(updateParentHeight);
-      observer.observe(document.body, { 
-        childList: true, 
-        subtree: true, 
-        attributes: true 
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
       });
 
+      // ---- Radio highlight ----------------------------------------------------
+      (function () {
+        const radios = document.querySelectorAll('.radio-option input[type="radio"]');
+        function syncRadioStyles() {
+          radios.forEach(function (radio) {
+            radio.closest(".radio-option").classList.toggle("is-selected", radio.checked);
+          });
+        }
+        radios.forEach(function (radio) {
+          radio.addEventListener("change", syncRadioStyles);
+        });
+        syncRadioStyles();
+      })();
+
+      // ---- Pickup date / time validation --------------------------------------
       (function () {
         const form = document.getElementById("webToLeadForm");
         const pickupDate = document.getElementById("pickupDate");
@@ -795,3 +902,6 @@
     </script>
   </body>
 </html>
+apps-fileview.texmex_20260730.00_p1
+book-request-form.html
+Displaying book-request-form.html.
